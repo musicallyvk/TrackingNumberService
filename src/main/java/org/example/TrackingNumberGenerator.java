@@ -35,9 +35,15 @@ public class TrackingNumberGenerator {
         countryCodeMap.put("USA", "US");
         countryCodeMap.put("Canada", "CA");
         countryCodeMap.put("United Kingdom", "UK");
-        // Add more countries as needed
     }
 
+     /**
+     * Constructor to initialize the TrackingNumberGenerator with datacenter ID and worker ID.
+     *
+     * @param datacenterId ID of the datacenter, must be within valid range.
+     * @param workerId     ID of the worker, must be within valid range.
+     * @throws IllegalArgumentException if datacenterId or workerId is out of valid range.
+     */
     public TrackingNumberGenerator(long datacenterId, long workerId) {
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
             throw new IllegalArgumentException(String.format("Datacenter ID can't be greater than %d or less than 0", maxDatacenterId));
@@ -49,10 +55,22 @@ public class TrackingNumberGenerator {
         this.workerId = workerId;
     }
 
+     /**
+     * Generates the current system time in milliseconds.
+     *
+     * @return current system time in milliseconds.
+     */
     private long timeGen() {
         return System.currentTimeMillis();
     }
 
+
+    /**
+     * Waits until the next millisecond if the current timestamp is the same as or less than the last timestamp.
+     *
+     * @param lastTimestamp the last generated timestamp.
+     * @return the next valid timestamp.
+     */
     private long tilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
@@ -61,10 +79,24 @@ public class TrackingNumberGenerator {
         return timestamp;
     }
 
+
+    /**
+     * Retrieves the country code corresponding to the given country name from the countryCodeMap.
+     *
+     * @param country the name of the country.
+     * @return the corresponding country code, or "XX" if not found.
+     */
     private String getCountryCode(String country) {
         return countryCodeMap.getOrDefault(country, "XX");
     }
 
+
+     /**
+     * Generates a random alphanumeric string of the specified length.
+     *
+     * @param length the length of the random string to generate.
+     * @return a randomly generated alphanumeric string.
+     */
     private String generateRandomString(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder result = new StringBuilder();
@@ -74,6 +106,14 @@ public class TrackingNumberGenerator {
         return result.toString();
     }
 
+    /**
+     * Generates a unique tracking number based on the given country and local address.
+     *
+     * @param country      the name of the country to use in the tracking number.
+     * @param localAddress the local address to include in the tracking number.
+     * @return a unique tracking number in the format: [CountryCode]-[LocalAddress]-[UniquePart]-[RandomPart].
+     * @throws RuntimeException if the system clock moves backwards.
+     */
     public String generateTrackingNumber(String country, String localAddress) {
         lock.lock();
         try {
