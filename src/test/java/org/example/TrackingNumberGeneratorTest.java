@@ -13,6 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TrackingNumberGeneratorTest {
 
+
+    /**
+     * Test concurrent generation of tracking numbers to ensure uniqueness.
+     * Verifies that no two threads generate the same tracking number concurrently.
+     *
+     * @throws InterruptedException if the thread is interrupted while waiting for termination.
+     */
     @Test
     public void testConcurrency() throws InterruptedException {
         TrackingNumberGenerator generator = new TrackingNumberGenerator(1, 1);
@@ -39,12 +46,21 @@ public class TrackingNumberGeneratorTest {
     }
 
 
+    /**
+     * Test invalid datacenterId and workerId inputs during TrackingNumberGenerator instantiation.
+     * Verifies that IllegalArgumentException is thrown when invalid IDs are provided.
+     */
     @Test
     public void testInvalidIds() {
         assertThrows(IllegalArgumentException.class, () -> new TrackingNumberGenerator(-1, 1));
         assertThrows(IllegalArgumentException.class, () -> new TrackingNumberGenerator(1, -1));
     }
 
+
+    /**
+     * Test handling of clock moving backwards scenario in generateTrackingNumber method.
+     * Verifies that a RuntimeException is thrown when the clock moves backwards.
+     */
     @Test
     public void testClockBackwards() {
         TrackingNumberGenerator generator = new TrackingNumberGenerator(1, 1);
@@ -54,6 +70,11 @@ public class TrackingNumberGeneratorTest {
         assertThrows(RuntimeException.class, () -> generator.generateTrackingNumber("USA", "NYC"));
     }
 
+
+    /**
+     * Test the format and content of generated tracking numbers.
+     * Verifies that generated tracking numbers match the expected format.
+     */
     @Test
     public void testGenerateTrackingNumber() {
         TrackingNumberGenerator generator = new TrackingNumberGenerator(1, 1);
