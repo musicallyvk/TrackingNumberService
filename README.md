@@ -8,4 +8,13 @@ this code is using a snowflake ID generator algorithm which is from TWITTER and 
 
 It is checking for uniquness of tracking number also which is giving the answer for FAULT TOLERANCE and duplicacy also.
 
+
+
+Which will generate the below Output as aTracking Numbers
+UK-LDN-414720-KI9F7
+UK-LDN-381184-JPCLL
+UK-LDN-381185-QM8PN
+UK-LDN-381186-VXP9D
+
+
 Thanks !
